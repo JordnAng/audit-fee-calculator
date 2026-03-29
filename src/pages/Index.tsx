@@ -32,6 +32,16 @@ export default function Index() {
   const recommendedFee = fees.length > 0 ? Math.max(...fees) : 0;
 
   const parseInput = (val: string) => val.replace(/[^0-9.]/g, "");
+  const formatWithCommas = (val: string) => {
+    if (!val) return "";
+    const [whole, decimal] = val.split(".");
+    const formatted = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return decimal !== undefined ? `${formatted}.${decimal}` : formatted;
+  };
+  const handleChange = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = parseInput(e.target.value.replace(/,/g, ""));
+    setter(raw);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,9 +70,9 @@ export default function Index() {
               id="revenue"
               type="text"
               inputMode="decimal"
-              placeholder="e.g. 500000"
-              value={grossRevenue}
-              onChange={(e) => setGrossRevenue(parseInput(e.target.value))}
+              placeholder="e.g. 500,000"
+              value={formatWithCommas(grossRevenue)}
+              onChange={handleChange(setGrossRevenue)}
             />
           </div>
           <div>
@@ -76,9 +86,9 @@ export default function Index() {
               id="assets"
               type="text"
               inputMode="decimal"
-              placeholder="e.g. 1000000"
-              value={totalAssets}
-              onChange={(e) => setTotalAssets(parseInput(e.target.value))}
+              placeholder="e.g. 1,000,000"
+              value={formatWithCommas(totalAssets)}
+              onChange={handleChange(setTotalAssets)}
             />
           </div>
           <div>
@@ -92,9 +102,9 @@ export default function Index() {
               id="opex"
               type="text"
               inputMode="decimal"
-              placeholder="e.g. 200000"
-              value={totalOpex}
-              onChange={(e) => setTotalOpex(parseInput(e.target.value))}
+              placeholder="e.g. 200,000"
+              value={formatWithCommas(totalOpex)}
+              onChange={handleChange(setTotalOpex)}
             />
           </div>
         </Card>
